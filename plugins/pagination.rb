@@ -11,7 +11,7 @@ module Jekyll
     # Returns nothing.
     def generate(site)
       site.pages.dup.each do |page|
-        paginate(site, page) if Pager.pagination_enabled?(site.config, page)
+        paginate(site, page) if Pager.pagination_enabled?(site)
       end
     end
 
@@ -69,8 +69,10 @@ module Jekyll
     # file   - The String filename of the file.
     #
     # Returns true if pagination is enabled, false otherwise.
-    def self.pagination_enabled?(config, file)
-      file.name == 'index.html' && !config['paginate'].nil? && file.content =~ /paginator\./
+    def self.pagination_enabled?(site)
+      !site.config['paginate'].nil? &&
+        site.pages.size > 0
+      # file.name == 'index.html' && !config['paginate'].nil? && file.content =~ /paginator\./
     end
 
     # Initialize a new Pager.
