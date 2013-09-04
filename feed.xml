@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+		<link href="/stylesheets/normalize.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/all.css" media="screen" rel="stylesheet" type="text/css" />
+		<script src="/javascripts/all.js" type="text/javascript"></script>
+		<title></title>
+	</head>
+	<body class="feed">
+		<div class="container">
+			<div id="main" role="main">
+				<h1><a href="/">Koen.pt</a></h1>
+				<h2></h2>
+				<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Blog Name</title>
+  <subtitle>Blog subtitle</subtitle>
+  <id>http://blog.url.com/</id>
+  <link href="http://blog.url.com/"/>
+  <link href="http://blog.url.com/feed.xml" rel="self"/>
+  <updated>2013-01-16T23:00:00Z</updated>
+  <author>
+    <name>Blog Author</name>
+  </author>
+  <entry>
+    <title>SSH shell wrapper to provide custom prompt</title>
+    <link rel="alternate" href="/blog/2013/01/17/ssh-shell-wrapper-to-provide-custom-prompt/"/>
+    <id>/blog/2013/01/17/ssh-shell-wrapper-to-provide-custom-prompt/</id>
+    <published>2013-01-16T23:00:00Z</published>
+    <updated>2013-01-16T23:00:00Z</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;Or: &lt;a href="http://www.linuxquestions.org/questions/showthread.php?p=4871626"&gt;How do you turn off login banner for non-interactive ssh?&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I figured out two methods to accomplish this task;&lt;/p&gt;
+
+&lt;h2&gt;1. Using &lt;code&gt;command&lt;/code&gt; in .authorized_keys&lt;/h2&gt;
+
+&lt;p&gt;In &lt;code&gt;~/.ssh/authorized_keys&lt;/code&gt; you add the following before a specific key&lt;/p&gt;
+&lt;pre class="highlight text"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;command=&amp;quot;/usr/local/bin/shell-wrapper&amp;quot; ssh-rsa AAAAB3NzaC1yc2...JZK1E8H60=
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;And in &lt;code&gt;/usr/local/bin/shell-wrapper&lt;/code&gt;&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c"&gt;#!/bin/sh&lt;/span&gt;
+
+&lt;span class="c"&gt;# If there is a command given, it executes it with the users shell &lt;/span&gt;
+&lt;span class="c"&gt;# if no command given it outputs the contents of BANNER and starts&lt;/span&gt;
+&lt;span class="c"&gt;# the user's shell.&lt;/span&gt;
+
+&lt;span class="nv"&gt;BANNER&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/etc/issue.net
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; -n &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$SSH_ORIGINAL_COMMAND&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt; ; &lt;span class="k"&gt;then&lt;/span&gt;
+  &lt;span class="nv"&gt;$SHELL&lt;/span&gt; -c &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$SSH_ORIGINAL_COMMAND&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;span class="k"&gt;else
+  &lt;/span&gt;cat &lt;span class="nv"&gt;$BANNER&lt;/span&gt;
+  &lt;span class="nv"&gt;$SHELL&lt;/span&gt;
+&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Downside of this method is that you have to set this for every rsa-key in the &lt;code&gt;.authorized_keys&lt;/code&gt; file&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2&gt;2. Changing the users shell&lt;/h2&gt;
+
+&lt;p&gt;Set shell for user (change USERNAME to your user):&lt;/p&gt;
+&lt;pre class="highlight text"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;usermod --shell /usr/local/bin/shell-wrapper USERNAME
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Create &lt;code&gt;/usr/local/bin/shell-wrapper&lt;/code&gt; with the following content:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="c"&gt;#!/bin/sh&lt;/span&gt;
+
+&lt;span class="c"&gt;# If there are no arguments given, it outputs the contents of&lt;/span&gt;
+&lt;span class="c"&gt;# BANNER and starts the specified shell. When there are &lt;/span&gt;
+&lt;span class="c"&gt;# arguments given it executes that with the specified shell&lt;/span&gt;
+
+&lt;span class="nv"&gt;BANNER&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/etc/issue.net
+&lt;span class="nv"&gt;SHELL&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/bin/sh
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="nv"&gt;$# &lt;/span&gt;-eq 0 &lt;span class="o"&gt;]&lt;/span&gt;; &lt;span class="k"&gt;then
+  &lt;/span&gt;cat &lt;span class="nv"&gt;$BANNER&lt;/span&gt;
+  &lt;span class="nv"&gt;$SHELL&lt;/span&gt;
+&lt;span class="k"&gt;else
+  &lt;/span&gt;&lt;span class="nb"&gt;shift&lt;/span&gt;
+  &lt;span class="nv"&gt;$SHELL&lt;/span&gt; -c &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$@&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;</content>
+  </entry>
+  <entry>
+    <title>Using Nginx as SSL proxy for name based VirtualHosts in Apache</title>
+    <link rel="alternate" href="/blog/2012/10/04/using-nginx-as-reverse-proxy-for-name-based-virtualhosts-over-ssl/"/>
+    <id>/blog/2012/10/04/using-nginx-as-reverse-proxy-for-name-based-virtualhosts-over-ssl/</id>
+    <published>2012-10-03T22:00:00Z</published>
+    <updated>2012-10-03T22:00:00Z</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;At &lt;a href="http://www.fetch.nl"&gt;the company&lt;/a&gt; where I work we develop &lt;a href="https://www.facebook.com/Mad.Men.NL?sk=app_168774736517112"&gt;all&lt;/a&gt; &lt;a href="https://www.facebook.com/Teva/app_273697399381481"&gt;kinds&lt;/a&gt; &lt;a href="https://www.facebook.com/nederlandsespoorwegen/app_458845137479729"&gt;of&lt;/a&gt; Facebook applications. And for them to properly work on Facebook, they need to be available over HTTPS. &lt;/p&gt;
+
+&lt;p&gt;And because registering and installing a new certificate for each and every new app we create is a real pain in the ass, we registered a wildcard certificate and are hosting all the apps on subdomains.&lt;/p&gt;
+
+&lt;p&gt;That worked well, but we still had to request a new IP address for every app, because the lack of &lt;a href="http://en.wikipedia.org/wiki/Server_Name_Indication"&gt;SNI&lt;/a&gt; in all versions of Internet Explorer on Windows XP. &lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;Now it happens to be that I just recently started to use &lt;a href="http://nginx.org/"&gt;Nginx&lt;/a&gt; as primary HTTP software on most of the servers I maintain. And using the great proxy functionality of Nginx I managed to setup a server with Nginx as frontend and Apache as backend, where Nginx handles the SSL requests (listening on port 443) for the wildcard domain, and proxies the requests with the correct –requested– hostname to Apache (listening on port 80) so it can use SNI to determine which content to show. &lt;/p&gt;
+
+&lt;p&gt;Now the problem arose that links generated by frameworks running under Apache do not know they are requested over SSL, so they would still begin with &lt;code&gt;http://&lt;/code&gt; instead of &lt;code&gt;https://&lt;/code&gt;, because Apache doesn&amp;#39;t tell them to. &lt;/p&gt;
+
+&lt;p&gt;There &lt;a href="https://github.com/gnif/mod_rpaf"&gt;mod_rpaf&lt;/a&gt; (reverse proxy add forward) comes into place. This module can set Apache&amp;#39;s &lt;code&gt;REMOTE_ADDR&lt;/code&gt;, &lt;code&gt;HTTPS&lt;/code&gt; and &lt;code&gt;HTTP_PORT&lt;/code&gt; –which are generally used to determine if a site is running over SSL– to the values provided by Nginx.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;See my configuration below.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Nginx server block:&lt;/p&gt;
+&lt;pre class="highlight nginx"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;div class="lineno"&gt;18&lt;/div&gt;&lt;div class="lineno"&gt;19&lt;/div&gt;&lt;div class="lineno"&gt;20&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="k"&gt;server&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="kn"&gt;listen&lt;/span&gt; &lt;span class="mi"&gt;443&lt;/span&gt; &lt;span class="s"&gt;ssl&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="kn"&gt;server_name&lt;/span&gt; &lt;span class="p"&gt;~&lt;/span&gt;&lt;span class="sr"&gt;^(www\.)?(?&amp;lt;domain&amp;gt;.+)$;&lt;/span&gt;
+  &lt;span class="c1"&gt;# It's possible to configure Nginx to serve static files directly, 
+&lt;/span&gt;  &lt;span class="c1"&gt;# and bypassing Apache but I won't describe that here.
+&lt;/span&gt;  &lt;span class="s"&gt;root&lt;/span&gt; &lt;span class="n"&gt;/var/apps/&lt;/span&gt;&lt;span class="nv"&gt;$domain&lt;/span&gt;&lt;span class="n"&gt;/current/public&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+  &lt;span class="kn"&gt;ssl_certificate&lt;/span&gt; &lt;span class="n"&gt;/etc/ssl/certs/cmpgns/STAR_cmpgns_nl.crt&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="kn"&gt;ssl_certificate_key&lt;/span&gt; &lt;span class="n"&gt;/etc/ssl/private/STAR_cmpgns_nl.key&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+  &lt;span class="kn"&gt;location&lt;/span&gt; &lt;span class="n"&gt;/&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;# Apache is listening here
+&lt;/span&gt;    &lt;span class="kn"&gt;proxy_pass&lt;/span&gt; &lt;span class="s"&gt;http://127.0.0.1:80&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="kn"&gt;proxy_set_header&lt;/span&gt; &lt;span class="s"&gt;Host&lt;/span&gt; &lt;span class="nv"&gt;$host&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="kn"&gt;proxy_set_header&lt;/span&gt; &lt;span class="s"&gt;X-Real-IP&lt;/span&gt; &lt;span class="nv"&gt;$remote_addr&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="kn"&gt;proxy_set_header&lt;/span&gt; &lt;span class="s"&gt;X-Forwarded-For&lt;/span&gt; &lt;span class="nv"&gt;$proxy_add_x_forwarded_for&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="c1"&gt;# Set HTTPS flag for mod_rpaf
+&lt;/span&gt;    &lt;span class="kn"&gt;proxy_set_header&lt;/span&gt; &lt;span class="s"&gt;X-Forwarded-HTTPS&lt;/span&gt; &lt;span class="no"&gt;on&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Apache VirtualHost:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&amp;lt;VirtualHost 127.0.0.1:80&amp;gt;
+  ServerName some-subdomain.cmpgns.nl
+  DocumentRoot &amp;quot;/var/apps/some-subdomain.cmpgns.nl/current/public&amp;quot;
+
+  RewriteEngine on
+  &amp;lt;Directory &amp;quot;/var/apps/some-subdomain.cmpgns.nl/current/public&amp;quot;&amp;gt;
+    Allow from all
+  &amp;lt;/Directory&amp;gt;
+&amp;lt;/VirtualHost&amp;gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;
+&lt;p&gt;Apache RPAF configuration:&lt;/p&gt;
+&lt;pre class="highlight text"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;RPAF_Enable       On
+RPAF_ProxyIPs     127.0.0.1
+RPAF_Header       X-Real-IP
+RPAF_SetHostName  On
+RPAF_SetHTTPS     On
+RPAF_SetPort      On
+&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/pre&gt;</content>
+  </entry>
+</feed>
+
+			</div>
+			<aside>
+				<h2>Recent Articles</h2>
+				<ol>
+					
+					<li><a href="/blog/2013/01/17/ssh-shell-wrapper-to-provide-custom-prompt/">SSH shell wrapper to provide custom prompt</a> <span>Jan 17</span></li>
+					
+					<li><a href="/blog/2012/10/04/using-nginx-as-reverse-proxy-for-name-based-virtualhosts-over-ssl/">Using Nginx as SSL proxy for name based VirtualHosts in Apache</a> <span>Oct  4</span></li>
+					
+				</ol>
+
+				<h2>Tags</h2>
+				<ol>
+					
+					<li><a href="/blog/tags/apache/">Apache</a> (1)</a></li>
+					
+					<li><a href="/blog/tags/nginx/">Nginx</a> (1)</a></li>
+					
+					<li><a href="/blog/tags/server/">Server</a> (2)</a></li>
+					
+					<li><a href="/blog/tags/guide/">Guide</a> (2)</a></li>
+					
+					<li><a href="/blog/tags/facebook/">Facebook</a> (1)</a></li>
+					
+					<li><a href="/blog/tags/ssl/">SSL</a> (1)</a></li>
+					
+					<li><a href="/blog/tags/ssh/">SSH</a> (1)</a></li>
+					
+				</ol>
+
+				<h2>By Year</h2>
+				<ol>
+					
+					<li><a href="/blog/2013/">2013</a> (1)</a></li>
+					
+					<li><a href="/blog/2012/">2012</a> (1)</a></li>
+					
+				</ol>
+			</aside>
+		</div>
+	</body>
+</html>
