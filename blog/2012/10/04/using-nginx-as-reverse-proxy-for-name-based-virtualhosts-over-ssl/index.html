@@ -33,8 +33,8 @@
 <pre class="highlight nginx"><table><tbody><tr><td class="gutter gl"><div class="lineno">1</div><div class="lineno">2</div><div class="lineno">3</div><div class="lineno">4</div><div class="lineno">5</div><div class="lineno">6</div><div class="lineno">7</div><div class="lineno">8</div><div class="lineno">9</div><div class="lineno">10</div><div class="lineno">11</div><div class="lineno">12</div><div class="lineno">13</div><div class="lineno">14</div><div class="lineno">15</div><div class="lineno">16</div><div class="lineno">17</div><div class="lineno">18</div><div class="lineno">19</div><div class="lineno">20</div></td><td class="code"><span class="k">server</span> <span class="p">{</span>
   <span class="kn">listen</span> <span class="mi">443</span> <span class="s">ssl</span><span class="p">;</span>
   <span class="kn">server_name</span> <span class="p">~</span><span class="sr">^(www\.)?(?&lt;domain&gt;.+)$;</span>
-  <span class="c1"># It's possible to configure Nginx to serve static files directly, 
-</span>  <span class="c1"># and bypassing Apache but I won't describe that here.
+  <span class="c1"># It&#39;s possible to configure Nginx to serve static files directly, 
+</span>  <span class="c1"># and bypassing Apache but I won&#39;t describe that here.
 </span>  <span class="s">root</span> <span class="n">/var/apps/</span><span class="nv">$domain</span><span class="n">/current/public</span><span class="p">;</span>
 
   <span class="kn">ssl_certificate</span> <span class="n">/etc/ssl/certs/cmpgns/STAR_cmpgns_nl.crt</span><span class="p">;</span>

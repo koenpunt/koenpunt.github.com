@@ -49,7 +49,7 @@
 
 &lt;span class="c"&gt;# If there is a command given, it executes it with the users shell &lt;/span&gt;
 &lt;span class="c"&gt;# if no command given it outputs the contents of BANNER and starts&lt;/span&gt;
-&lt;span class="c"&gt;# the user's shell.&lt;/span&gt;
+&lt;span class="c"&gt;# the user&amp;#39;s shell.&lt;/span&gt;
 
 &lt;span class="nv"&gt;BANNER&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/etc/issue.net
 
@@ -115,8 +115,8 @@
 &lt;pre class="highlight nginx"&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class="gutter gl"&gt;&lt;div class="lineno"&gt;1&lt;/div&gt;&lt;div class="lineno"&gt;2&lt;/div&gt;&lt;div class="lineno"&gt;3&lt;/div&gt;&lt;div class="lineno"&gt;4&lt;/div&gt;&lt;div class="lineno"&gt;5&lt;/div&gt;&lt;div class="lineno"&gt;6&lt;/div&gt;&lt;div class="lineno"&gt;7&lt;/div&gt;&lt;div class="lineno"&gt;8&lt;/div&gt;&lt;div class="lineno"&gt;9&lt;/div&gt;&lt;div class="lineno"&gt;10&lt;/div&gt;&lt;div class="lineno"&gt;11&lt;/div&gt;&lt;div class="lineno"&gt;12&lt;/div&gt;&lt;div class="lineno"&gt;13&lt;/div&gt;&lt;div class="lineno"&gt;14&lt;/div&gt;&lt;div class="lineno"&gt;15&lt;/div&gt;&lt;div class="lineno"&gt;16&lt;/div&gt;&lt;div class="lineno"&gt;17&lt;/div&gt;&lt;div class="lineno"&gt;18&lt;/div&gt;&lt;div class="lineno"&gt;19&lt;/div&gt;&lt;div class="lineno"&gt;20&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;span class="k"&gt;server&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
   &lt;span class="kn"&gt;listen&lt;/span&gt; &lt;span class="mi"&gt;443&lt;/span&gt; &lt;span class="s"&gt;ssl&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
   &lt;span class="kn"&gt;server_name&lt;/span&gt; &lt;span class="p"&gt;~&lt;/span&gt;&lt;span class="sr"&gt;^(www\.)?(?&amp;lt;domain&amp;gt;.+)$;&lt;/span&gt;
-  &lt;span class="c1"&gt;# It's possible to configure Nginx to serve static files directly, 
-&lt;/span&gt;  &lt;span class="c1"&gt;# and bypassing Apache but I won't describe that here.
+  &lt;span class="c1"&gt;# It&amp;#39;s possible to configure Nginx to serve static files directly, 
+&lt;/span&gt;  &lt;span class="c1"&gt;# and bypassing Apache but I won&amp;#39;t describe that here.
 &lt;/span&gt;  &lt;span class="s"&gt;root&lt;/span&gt; &lt;span class="n"&gt;/var/apps/&lt;/span&gt;&lt;span class="nv"&gt;$domain&lt;/span&gt;&lt;span class="n"&gt;/current/public&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 
   &lt;span class="kn"&gt;ssl_certificate&lt;/span&gt; &lt;span class="n"&gt;/etc/ssl/certs/cmpgns/STAR_cmpgns_nl.crt&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
